@@ -18,6 +18,8 @@ $ pip install GDAL
 **Note**- Skip `Step3` is GDAL is properly installed.
 * Step3- If you encounter an error while running `pip install GDAL`, try the following.
 ```
+# Downgrade setup tools
+$ pip install setuptools==57.5.0
 $ ogrinfo --version # Copy the version number to the command below
 $ pip install GDAL==<version-number>
 ```
