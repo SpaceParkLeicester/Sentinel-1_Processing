@@ -111,7 +111,7 @@ export PYTHONPATH="${PYTHONPATH}:${HOME}/.snap/snap-python/"
 ```
 * Step9- Check out the `snappy` python package 
 ```
-$ python -c "from snappy import ProductIO" # If no error, installation is successful
+$ python -c "from snappy import ProductIO" # If no error, installation is successful.
 ```
 * Step10- Install python packages from conda channel `terradue`.
 **NOTE**: Make sure to install **Python3.7** in the virtual environment and install necessary packages from other instructions.

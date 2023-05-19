@@ -1,0 +1,66 @@
+<?xml version="1.0" ?><graph id="Graph">	
+    	<version>1.0</version>	
+    	<node id="Read">			
+      			<operator>Read</operator>			
+      			<sources/>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<file>/home/vardh/apps/tmp/S1A_IW_GRDH_1SDV_20230313T175210_20230313T175235_047629_05B868_4E5C.zip</file>					
+        					<formatName>SENTINEL-1</formatName>					
+        					<sourceBands/>					
+        					<sourceMasks/>					
+        					<pixelRegion/>					
+        					<geometryRegion/>					
+        					<copyMetadata>true</copyMetadata>					
+      			</parameters>			
+    	</node>	<node id="ThermalNoiseRemoval">			
+      			<operator>ThermalNoiseRemoval</operator>			
+      			<sources>					
+        					<sourceProduct refid="Read"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<selectedPolarisations/>					
+        					<removeThermalNoise>true</removeThermalNoise>					
+        					<reIntroduceThermalNoise>false</reIntroduceThermalNoise>					
+      			</parameters>			
+    	</node>	<node id="Remove-GRD-Border-Noise">			
+      			<operator>Remove-GRD-Border-Noise</operator>			
+      			<sources>					
+        					<sourceProduct refid="ThermalNoiseRemoval"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<selectedPolarisations>VV</selectedPolarisations>					
+        					<borderLimit>500</borderLimit>					
+        					<trimThreshold>0.5</trimThreshold>					
+      			</parameters>			
+    	</node>	<node id="Subset">			
+      			<operator>Subset</operator>			
+      			<sources>					
+        					<sourceProduct refid="Remove-GRD-Border-Noise"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<sourceBands/>					
+        					<region/>					
+        					<referenceBand/>					
+        					<geoRegion>POLYGON ((-3.057829985230527 58.87120129903605, -3.057829985230527 58.805463386036166, -3.1848709510394135 58.805463386036166, -3.1848709510394135 58.87120129903605, -3.057829985230527 58.87120129903605))</geoRegion>					
+        					<subSamplingX>1</subSamplingX>					
+        					<subSamplingY>1</subSamplingY>					
+        					<fullSwath>false</fullSwath>					
+        					<tiePointGrids/>					
+        					<copyMetadata>true</copyMetadata>					
+      			</parameters>			
+    	</node>	<node id="Write">			
+      			<operator>Write</operator>			
+      			<sources>					
+        					<sourceProduct refid="Subset"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<file>outname</file>					
+        					<formatName>BEAM-DIMAP</formatName>					
+        					<deleteOutputOnFailure>true</deleteOutputOnFailure>					
+        					<writeEntireTileRows>false</writeEntireTileRows>					
+        					<clearCacheAfterRowWrite>false</clearCacheAfterRowWrite>					
+      			</parameters>			
+    	</node>	<applicationData id="Presentation">		
+        		<Description/>		
+    		<node id="Read">			<displayPosition x="5" y="20.0"/>		</node>		<node id="ThermalNoiseRemoval">			<displayPosition x="37" y="160.0"/>		</node>		<node id="Remove-GRD-Border-Noise">			<displayPosition x="189" y="20.0"/>		</node>		<node id="Subset">			<displayPosition x="373" y="160.0"/>		</node>		<node id="Write">			<displayPosition x="421" y="20.0"/>		</node>	</applicationData>	
+</graph>

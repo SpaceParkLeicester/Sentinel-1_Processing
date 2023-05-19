@@ -5,6 +5,8 @@ import os, gc
 from snappy import GPF
 from Sentinel_SAR.src.data import OilTerminals
 
+import logging
+logger = logging.getLogger(__name__)
 
 ## UTM projection parameters
 proj = '''PROJCS["UTM Zone 4 / World Geodetic System 1984",GEOGCS["World Geodetic System 1984",DATUM["World Geodetic System 1984",SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]],UNIT["degree", 0.017453292519943295],AXIS["Geodetic longitude", EAST],AXIS["Geodetic latitude", NORTH]],PROJECTION["Transverse_Mercator"],PARAMETER["central_meridian", -159.0],PARAMETER["latitude_of_origin", 0.0],PARAMETER["scale_factor", 0.9996],PARAMETER["false_easting", 500000.0],PARAMETER["false_northing", 0.0],UNIT["m", 1.0],AXIS["Easting", EAST],AXIS["Northing", NORTH]]'''
@@ -92,7 +94,7 @@ class pre_process():
         self.wkt_string = wkt_string
         self.log = log
 
-        # Grabage collect
+        # Garbage collect
         gc.enable()
         gc.collect()
 
@@ -188,25 +190,13 @@ if __name__ == "__main__":
     filename = 'flotta'
     wkt_string = data_dict["flotta"] 
 
-    grd_folder_path = 'data/SAFE/S1A_IW_GRDH_1SDV_20230301T175145_20230301T175210_047454_05B27C_E425.SAFE'
-    processed_folder = 'data/pre_process'
-    terminal_file_path = 'data/uk_oil_terminals.xlsx'
-    location_name = 'flotta'
-    termial_dict = oil_terminals(terminal_file_path = terminal_file_path)
-    for loaction, coords in termial_dict.items():
-        if loaction == location_name:
-            center_coords_lat = coords[0]
-            center_coords_lon = coords[1]
-            break
-    wkt_string = bbox(
-        half_side = 10,
-        center_lat = center_coords_lat,
-        center_lon = center_coords_lon)
+    grd_folder_path = '/home/vardh/apps/tmp/S1A_IW_GRDH_1SDV_20230313T175210_20230313T175235_047629_05B868_4E5C.SAFE'
+    processed_folder = 'data/pre_process/processed'
     preprocess = pre_process(
         grd_folder_path = grd_folder_path,
         processed_folder = processed_folder,
         wkt_string = wkt_string,
-        log = logger())
+        log = logger)
     preprocess.collect_data()
     preprocess.polarisation()
     # preprocess.start_preprocess()

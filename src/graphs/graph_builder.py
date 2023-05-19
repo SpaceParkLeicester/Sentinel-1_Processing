@@ -41,7 +41,6 @@ class esa_snap_graph():
         self.uuid = os.path.basename(os.path.dirname(self.manifest_path))
         self.polstamp = self.uuid.split("_")[3]
         self.polarization = self.polstamp[2:4]
-        print(self.polarization)
         if self.polarization == 'DV':
             self.pols = ['VH','VV']
         elif self.polarization == 'DH':
@@ -202,7 +201,7 @@ class esa_snap_graph():
 
 
 if __name__ == "__main__":
-    safe_folder = "/home/vardh/apps/tmp/S1A_IW_GRDH_1SDV_20230313T175210_20230313T175235_047629_05B868_4E5C.SAFE/"
+    safe_folder = "/home/vardh/apps/tmp/S1A_IW_GRDH_1SDV_20230313T175210_20230313T175235_047629_05B868_4E5C.SAFE"
     # Getting the WKT string
     terminals = OilTerminals()
     data_dict = terminals.read_data()
