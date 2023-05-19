@@ -160,4 +160,10 @@ cython_debug/
 #.idea/
 
 *.code-workspace
-data/pre_process/processed
+*.tif
+*.safe
+*.cpg
+*.dbf
+*.prj
+*.shp
+*.shx
