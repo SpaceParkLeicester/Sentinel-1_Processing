@@ -1,0 +1,186 @@
+<?xml version="1.0" ?><graph id="Graph">	
+    	<version>1.0</version>	
+    	<node id="Read">			
+      			<operator>Read</operator>			
+      			<sources/>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<file>/home/vardh/downloads/S1_data/S1A_IW_GRDH_1SDV_20230514T062300_20230514T062325_048526_05D642_A40C.zip</file>					
+        					<formatName>SENTINEL-1</formatName>					
+        					<sourceBands/>					
+        					<sourceMasks/>					
+        					<pixelRegion/>					
+        					<geometryRegion/>					
+        					<copyMetadata>true</copyMetadata>					
+      			</parameters>			
+    	</node>	<node id="Remove-GRD-Border-Noise">			
+      			<operator>Remove-GRD-Border-Noise</operator>			
+      			<sources>					
+        					<sourceProduct refid="Read"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<selectedPolarisations>VH</selectedPolarisations>					
+        					<borderLimit>500</borderLimit>					
+        					<trimThreshold>0.5</trimThreshold>					
+      			</parameters>			
+    	</node>	<node id="Calibration">			
+      			<operator>Calibration</operator>			
+      			<sources>					
+        					<sourceProduct refid="Remove-GRD-Border-Noise"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<sourceBands/>					
+        					<auxFile>Latest Auxiliary File</auxFile>					
+        					<externalAuxFile/>					
+        					<outputImageInComplex>false</outputImageInComplex>					
+        					<outputImageScaleInDb>false</outputImageScaleInDb>					
+        					<createGammaBand>false</createGammaBand>					
+        					<createBetaBand>false</createBetaBand>					
+        					<selectedPolarisations>VH</selectedPolarisations>					
+        					<outputSigmaBand>false</outputSigmaBand>					
+        					<outputGammaBand>false</outputGammaBand>					
+        					<outputBetaBand>true</outputBetaBand>					
+      			</parameters>			
+    	</node>	<node id="ThermalNoiseRemoval">			
+      			<operator>ThermalNoiseRemoval</operator>			
+      			<sources>					
+        					<sourceProduct refid="Calibration"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<selectedPolarisations>VH</selectedPolarisations>					
+        					<removeThermalNoise>true</removeThermalNoise>					
+        					<reIntroduceThermalNoise>false</reIntroduceThermalNoise>					
+      			</parameters>			
+    	</node>	<node id="Apply-Orbit-File">			
+      			<operator>Apply-Orbit-File</operator>			
+      			<sources>					
+        					<sourceProduct refid="ThermalNoiseRemoval"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<orbitType>Sentinel Precise (Auto Download)</orbitType>					
+        					<polyDegree>3</polyDegree>					
+        					<continueOnFail>false</continueOnFail>					
+      			</parameters>			
+    	</node>	<node id="Subset">			
+      			<operator>Subset</operator>			
+      			<sources>					
+        					<sourceProduct refid="Apply-Orbit-File"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<sourceBands/>					
+        					<region>0,0,26571,16676</region>					
+        					<referenceBand/>					
+        					<geoRegion>POLYGON ((-2.92641539113536 53.2210572133225 0,-2.92641539113536 53.3170350811758 0,-2.77937442532648 53.3170350811758 0,-2.77937442532648 53.2210572133225 0,-2.92641539113536 53.2210572133225 0))</geoRegion>					
+        					<subSamplingX>1</subSamplingX>					
+        					<subSamplingY>1</subSamplingY>					
+        					<fullSwath>false</fullSwath>					
+        					<tiePointGrids/>					
+        					<copyMetadata>true</copyMetadata>					
+      			</parameters>			
+    	</node>	<node id="Multilook">			
+      			<operator>Multilook</operator>			
+      			<sources>					
+        					<sourceProduct refid="Subset"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<sourceBands/>					
+        					<nRgLooks>2</nRgLooks>					
+        					<nAzLooks>2</nAzLooks>					
+        					<outputIntensity>false</outputIntensity>					
+        					<grSquarePixel>true</grSquarePixel>					
+      			</parameters>			
+    	</node>	<node id="Terrain-Flattening">			
+      			<operator>Terrain-Flattening</operator>			
+      			<sources>					
+        					<sourceProduct refid="Multilook"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<sourceBands>Beta0_VH</sourceBands>					
+        					<demName>SRTM 1Sec HGT</demName>					
+        					<demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>					
+        					<externalDEMFile/>					
+        					<externalDEMNoDataValue>0</externalDEMNoDataValue>					
+        					<externalDEMApplyEGM>true</externalDEMApplyEGM>					
+        					<outputSimulatedImage>false</outputSimulatedImage>					
+        					<outputSigma0>true</outputSigma0>					
+        					<additionalOverlap>0.1</additionalOverlap>					
+        					<oversamplingMultiple>2</oversamplingMultiple>					
+      			</parameters>			
+    	</node>	<node id="Speckle-Filter">			
+      			<operator>Speckle-Filter</operator>			
+      			<sources>					
+        					<sourceProduct refid="Terrain-Flattening"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<sourceBands/>					
+        					<filter>Refined Lee</filter>					
+        					<filterSizeX>3</filterSizeX>					
+        					<filterSizeY>3</filterSizeY>					
+        					<dampingFactor>2</dampingFactor>					
+        					<estimateENL>false</estimateENL>					
+        					<enl>1.0</enl>					
+        					<numLooksStr>1</numLooksStr>					
+        					<windowSize>7x7</windowSize>					
+        					<targetWindowSizeStr>3x3</targetWindowSizeStr>					
+        					<sigmaStr>0.9</sigmaStr>					
+        					<anSize>50</anSize>					
+      			</parameters>			
+    	</node>	<node id="Terrain-Correction">			
+      			<operator>Terrain-Correction</operator>			
+      			<sources>					
+        					<sourceProduct refid="Speckle-Filter"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<sourceBands>Sigma0_VH</sourceBands>					
+        					<demName>SRTM 1Sec HGT</demName>					
+        					<externalDEMFile/>					
+        					<externalDEMNoDataValue>0</externalDEMNoDataValue>					
+        					<externalDEMApplyEGM>true</externalDEMApplyEGM>					
+        					<demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>					
+        					<imgResamplingMethod>BILINEAR_INTERPOLATION</imgResamplingMethod>					
+        					<pixelSpacingInMeter>20</pixelSpacingInMeter>					
+        					<pixelSpacingInDegree>0</pixelSpacingInDegree>					
+        					<mapProjection>GEOGCS[&quot;WGS84(DD)&quot;,DATUM[&quot;WGS84&quot;,SPHEROID[&quot;WGS84&quot;, 6378137.0, 298.257223563]],PRIMEM[&quot;Greenwich&quot;, 0.0],UNIT[&quot;degree&quot;, 0.017453292519943295],AXIS[&quot;Geodetic longitude&quot;, EAST],AXIS[&quot;Geodetic latitude&quot;, NORTH]]</mapProjection>					
+        					<alignToStandardGrid>false</alignToStandardGrid>					
+        					<standardGridOriginX>0</standardGridOriginX>					
+        					<standardGridOriginY>0</standardGridOriginY>					
+        					<nodataValueAtSea>true</nodataValueAtSea>					
+        					<saveDEM>false</saveDEM>					
+        					<saveLatLon>false</saveLatLon>					
+        					<saveIncidenceAngleFromEllipsoid>false</saveIncidenceAngleFromEllipsoid>					
+        					<saveLocalIncidenceAngle>false</saveLocalIncidenceAngle>					
+        					<saveProjectedLocalIncidenceAngle>false</saveProjectedLocalIncidenceAngle>					
+        					<saveSelectedSourceBand>true</saveSelectedSourceBand>					
+        					<saveLayoverShadowMask>false</saveLayoverShadowMask>					
+        					<applyRadiometricNormalization>false</applyRadiometricNormalization>					
+        					<saveSigmaNought>false</saveSigmaNought>					
+        					<saveGammaNought>false</saveGammaNought>					
+        					<saveBetaNought>false</saveBetaNought>					
+        					<incidenceAngleForSigma0>Use projected local incidence angle from DEM</incidenceAngleForSigma0>					
+        					<incidenceAngleForGamma0>Use projected local incidence angle from DEM</incidenceAngleForGamma0>					
+        					<auxFile>Latest Auxiliary File</auxFile>					
+        					<externalAuxFile/>					
+      			</parameters>			
+    	</node>	<node id="LinearToFromdB">			
+      			<operator>LinearToFromdB</operator>			
+      			<sources>					
+        					<sourceProduct refid="Terrain-Correction"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<sourceBands>Sigma0_VH</sourceBands>					
+      			</parameters>			
+    	</node>	<node id="Write">			
+      			<operator>Write</operator>			
+      			<sources>					
+        					<sourceProduct refid="LinearToFromdB"/>					
+      			</sources>			
+      			<parameters class="com.bc.ceres.binding.dom.XppDomElement">					
+        					<file>data/processed/stanlow/S1A__IW___D_20230514T062300_Cal_NR_Orb_ML_TF_Spk_TC_dB</file>					
+        					<formatName>ENVI</formatName>					
+        					<deleteOutputOnFailure>true</deleteOutputOnFailure>					
+        					<writeEntireTileRows>false</writeEntireTileRows>					
+        					<clearCacheAfterRowWrite>false</clearCacheAfterRowWrite>					
+      			</parameters>			
+    	</node>	<applicationData id="Presentation">		
+        		<Description/>		
+    		<node id="Read">			<displayPosition x="5" y="20.0"/>		</node>		<node id="Remove-GRD-Border-Noise">			<displayPosition x="37" y="160.0"/>		</node>		<node id="Calibration">			<displayPosition x="221" y="20.0"/>		</node>		<node id="ThermalNoiseRemoval">			<displayPosition x="309" y="160.0"/>		</node>		<node id="Apply-Orbit-File">			<displayPosition x="461" y="20.0"/>		</node>		<node id="Subset">			<displayPosition x="589" y="160.0"/>		</node>		<node id="Multilook">			<displayPosition x="637" y="20.0"/>		</node>		<node id="Terrain-Flattening">			<displayPosition x="709" y="160.0"/>		</node>		<node id="Speckle-Filter">			<displayPosition x="853" y="20.0"/>		</node>		<node id="Terrain-Correction">			<displayPosition x="965" y="160.0"/>		</node>		<node id="LinearToFromdB">			<displayPosition x="1109" y="20.0"/>		</node>		<node id="Write">			<displayPosition x="1221" y="160.0"/>		</node>	</applicationData>	
+</graph>
