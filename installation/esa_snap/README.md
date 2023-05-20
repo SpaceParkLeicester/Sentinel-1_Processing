@@ -113,4 +113,14 @@ export PYTHONPATH="${PYTHONPATH}:${HOME}/.snap/snap-python/"
 ```
 $ python -c "from snappy import ProductIO" # If no error, installation is successful.
 ```
-* Step10- Install `pyroSAR` python package fro SAR processing
+* Step10- Either Install python packages from conda channel `terradue`.
+**NOTE**: Make sure to install **Python3.7** in the virtual environment and install necessary packages from other instructions.
+
+Each project requires set of packages with set of requirement versions. This project requires following packages from different `anaconda` channels.
+* Installing necessary packages from channel [`terradue`](https://anaconda.org/Terradue/repo) - `snap` and `snapista`. Note: These packages uses `python3.7` hence, it is advised to create a remote `venv` just for these package operations to avoid dependency issues. 
+```
+$ mamba install -c conda-forge python_abi
+$ mamba install -c terradue snap
+$ mamba install -c terradue snapista
+```
+* Step11 -  Or install `pyroSAR` package which has all the python functionalities of `SNAP` and `GPT`. Pleas follow (instructions)[https://pyrosar.readthedocs.io/en/latest/general/installation.html] for the installation.

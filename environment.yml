@@ -1,0 +1,18 @@
+name: esa_snap
+channels:
+  - conda-forge
+  - terradue
+dependencies:
+  - python=3.7
+  - python_abi
+  - ca-certificates
+  - openssl
+  - snap
+  - snapista
+  - geopandas
+  - certifi
+  - colorlog
+  - openpyxl
+  - pyrosar
+  - pip:
+    - GDAL
