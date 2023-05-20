@@ -23,6 +23,8 @@ $ pip install setuptools==57.5.0
 $ ogrinfo --version # Copy the version number to the command below
 $ pip install GDAL==<version-number>
 ```
+**Note** - If there was any error regarding 'x86_64-linux-gnu-gcc', try `sudo apt-get install python3.x-dev`, make sure to install python3.x that is same as python version used in the virtual env.
+
 Make sure to check that you can import `gdal` from `osgeo`. Run the following.
 ```
 # Activate the conda environment
